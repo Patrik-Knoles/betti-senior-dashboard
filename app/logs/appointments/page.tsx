@@ -1,12 +1,17 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import Link from "next/link"
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   ArrowLeft,
   Calendar,
@@ -22,13 +27,14 @@ import {
   Utensils,
   Pill,
   Droplets,
-} from "lucide-react"
+  Heart,
+} from "lucide-react";
 
 export default function AppointmentsPage() {
-  const [dateFilter, setDateFilter] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [confirmedNotes, setConfirmedNotes] = useState<number[]>([])
+  const [dateFilter, setDateFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [confirmedNotes, setConfirmedNotes] = useState<number[]>([]);
 
   const appointments = [
     {
@@ -38,7 +44,8 @@ export default function AppointmentsPage() {
       doctor: "Dr. Smith",
       type: "General Checkup",
       status: "Confirmed",
-      notes: "Blood pressure check and routine examination. Patient is doing well.",
+      notes:
+        "Blood pressure check and routine examination. Patient is doing well.",
       noteConfirmed: false,
     },
     {
@@ -58,7 +65,8 @@ export default function AppointmentsPage() {
       doctor: "Dr. Johnson",
       type: "Cardiology",
       status: "Completed",
-      notes: "Heart rate and rhythm normal. Continue current medication regimen. Next visit in 3 months.",
+      notes:
+        "Heart rate and rhythm normal. Continue current medication regimen. Next visit in 3 months.",
       noteConfirmed: true,
     },
     {
@@ -68,7 +76,8 @@ export default function AppointmentsPage() {
       doctor: "Dr. Williams",
       type: "Dermatology",
       status: "Completed",
-      notes: "Skin examination complete. Minor age spots noted, no concerns. Use sunscreen daily.",
+      notes:
+        "Skin examination complete. Minor age spots noted, no concerns. Use sunscreen daily.",
       noteConfirmed: true,
     },
     {
@@ -78,170 +87,213 @@ export default function AppointmentsPage() {
       doctor: "Dr. Brown",
       type: "Eye Exam",
       status: "Completed",
-      notes: "Vision stable. Prescription unchanged. Schedule next exam in 12 months.",
+      notes:
+        "Vision stable. Prescription unchanged. Schedule next exam in 12 months.",
       noteConfirmed: false,
     },
-  ]
+  ];
 
   const handleConfirmNote = (appointmentId: number) => {
-    setConfirmedNotes((prev) => [...prev, appointmentId])
-  }
+    setConfirmedNotes((prev) => [...prev, appointmentId]);
+  };
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   const filteredAppointments = appointments.filter((appointment) => {
-    if (dateFilter && !appointment.date.includes(dateFilter)) return false
-    if (statusFilter !== "all" && appointment.status.toLowerCase() !== statusFilter) return false
-    return true
-  })
+    if (dateFilter && !appointment.date.includes(dateFilter)) return false;
+    if (
+      statusFilter !== "all" &&
+      appointment.status.toLowerCase() !== statusFilter
+    )
+      return false;
+    return true;
+  });
 
-  const completedAppointments = appointments.filter((apt) => apt.status === "Completed").length
-  const totalAppointments = appointments.length
-  const completionRate = Math.round((completedAppointments / totalAppointments) * 100)
+  const completedAppointments = appointments.filter(
+    (apt) => apt.status === "Completed"
+  ).length;
+  const totalAppointments = appointments.length;
+  const completionRate = Math.round(
+    (completedAppointments / totalAppointments) * 100
+  );
 
   return (
-    <div className="min-h-screen bg-white p-4 font-sans">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-white p-2 sm:p-4 lg:p-6 font-sans">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+        {/* Side Menu */}
         {isMenuOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm z-50" onClick={toggleMenu}>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm z-50"
+            onClick={toggleMenu}
+          >
             <div
-              className="fixed right-0 top-0 h-full w-80 bg-white shadow-lg p-6 overflow-y-auto"
+              className="fixed right-0 top-0 h-full w-72 sm:w-80 bg-white shadow-lg p-4 sm:p-6 overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-serif text-secondary-blue">Menu</h2>
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-serif text-blue-800">
+                  Menu
+                </h2>
                 <Button onClick={toggleMenu} variant="ghost" size="sm">
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </div>
 
-              <div className="space-y-4">
-                <Link href="/profile" className="block">
-                  <Button variant="outline" className="w-full justify-start text-left p-4 h-auto bg-transparent">
-                    <User className="mr-3 h-5 w-5 text-secondary-blue" />
-                    <div>
-                      <div className="font-medium">Profile</div>
-                      <div className="text-sm text-alt-dark-gray">Personal information</div>
+              <div className="space-y-3 sm:space-y-4">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left p-3 sm:p-4 h-auto bg-transparent"
+                >
+                  <User className="mr-3 h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                  <div>
+                    <div className="font-medium text-sm sm:text-base">
+                      Profile
                     </div>
-                  </Button>
-                </Link>
-
-                <Link href="/settings" className="block">
-                  <Button variant="outline" className="w-full justify-start text-left p-4 h-auto bg-transparent">
-                    <Settings className="mr-3 h-5 w-5 text-secondary-blue" />
-                    <div>
-                      <div className="font-medium">Settings</div>
-                      <div className="text-sm text-alt-dark-gray">App preferences</div>
+                    <div className="text-xs sm:text-sm text-gray-500">
+                      Personal information
                     </div>
-                  </Button>
-                </Link>
+                  </div>
+                </Button>
 
-                <hr className="my-4 border-alt-light-gray" />
-
-                <div className="text-sm font-medium text-alt-dark-gray mb-2">Activity Logs</div>
-
-                <Link href="/logs/restroom" className="block">
-                  <Button variant="outline" className="w-full justify-start text-left p-4 h-auto bg-transparent">
-                    <MapPin className="mr-3 h-5 w-5 text-secondary-blue" />
-                    <div>
-                      <div className="font-medium">Restroom Activity</div>
-                      <div className="text-sm text-alt-dark-gray">View bathroom visits</div>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left p-3 sm:p-4 h-auto bg-transparent"
+                >
+                  <Settings className="mr-3 h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                  <div>
+                    <div className="font-medium text-sm sm:text-base">
+                      Settings
                     </div>
-                  </Button>
-                </Link>
+                    <div className="text-xs sm:text-sm text-gray-500">
+                      App preferences
+                    </div>
+                  </div>
+                </Button>
 
-                <Link href="/logs/appointments" className="block">
+                <hr className="my-3 sm:my-4 border-gray-200" />
+
+                <div className="text-xs sm:text-sm font-medium text-gray-500 mb-2">
+                  Activity Logs
+                </div>
+
+                {[
+                  {
+                    icon: MapPin,
+                    title: "Restroom Activity",
+                    desc: "View bathroom visits",
+                  },
+                  {
+                    icon: Calendar,
+                    title: "Appointments",
+                    desc: "Medical appointments log",
+                    active: true,
+                  },
+                  {
+                    icon: Utensils,
+                    title: "Meals",
+                    desc: "Food intake tracking",
+                  },
+                  {
+                    icon: Pill,
+                    title: "Medications",
+                    desc: "Medication history",
+                  },
+                  {
+                    icon: Droplets,
+                    title: "Hydration",
+                    desc: "Water intake logs",
+                  },
+                ].map((item, index) => (
                   <Button
+                    key={index}
                     variant="outline"
-                    className="w-full justify-start text-left p-4 h-auto bg-transparent border-primary-green"
+                    className={`w-full justify-start text-left p-3 sm:p-4 h-auto bg-transparent ${
+                      item.active ? "border-green-600" : ""
+                    }`}
                   >
-                    <Calendar className="mr-3 h-5 w-5 text-primary-green" />
+                    <item.icon
+                      className={`mr-3 h-4 w-4 sm:h-5 sm:w-5 ${
+                        item.active ? "text-green-600" : "text-blue-600"
+                      }`}
+                    />
                     <div>
-                      <div className="font-medium text-primary-green">Appointments</div>
-                      <div className="text-sm text-alt-dark-gray">Medical appointments log</div>
+                      <div
+                        className={`font-medium text-sm sm:text-base ${
+                          item.active ? "text-green-600" : ""
+                        }`}
+                      >
+                        {item.title}
+                      </div>
+                      <div className="text-xs sm:text-sm text-gray-500">
+                        {item.desc}
+                      </div>
                     </div>
                   </Button>
-                </Link>
-
-                <Link href="/logs/meals" className="block">
-                  <Button variant="outline" className="w-full justify-start text-left p-4 h-auto bg-transparent">
-                    <Utensils className="mr-3 h-5 w-5 text-secondary-blue" />
-                    <div>
-                      <div className="font-medium">Meals</div>
-                      <div className="text-sm text-alt-dark-gray">Food intake tracking</div>
-                    </div>
-                  </Button>
-                </Link>
-
-                <Link href="/logs/medications" className="block">
-                  <Button variant="outline" className="w-full justify-start text-left p-4 h-auto bg-transparent">
-                    <Pill className="mr-3 h-5 w-5 text-secondary-blue" />
-                    <div>
-                      <div className="font-medium">Medications</div>
-                      <div className="text-sm text-alt-dark-gray">Medication history</div>
-                    </div>
-                  </Button>
-                </Link>
-
-                <Link href="/logs/hydration" className="block">
-                  <Button variant="outline" className="w-full justify-start text-left p-4 h-auto bg-transparent">
-                    <Droplets className="mr-3 h-5 w-5 text-secondary-blue" />
-                    <div>
-                      <div className="font-medium">Hydration</div>
-                      <div className="text-sm text-alt-dark-gray">Water intake logs</div>
-                    </div>
-                  </Button>
-                </Link>
+                ))}
               </div>
             </div>
           </div>
         )}
 
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
-              </Button>
-            </Link>
-            <h1 className="text-3xl font-serif text-secondary-blue">Medical Appointments</h1>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+            <Button
+              variant="outline"
+              size="sm"
+              className="self-start sm:self-auto border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+            >
+              <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+              <span className="text-xs sm:text-sm">Back to Dashboard</span>
+            </Button>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-serif text-blue-800">
+              Medical Appointments
+            </h1>
           </div>
 
           <Button
             onClick={toggleMenu}
             variant="outline"
             size="lg"
-            className="border-secondary-blue text-secondary-blue hover:bg-secondary-blue hover:text-white bg-transparent"
+            className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent self-start sm:self-auto"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? (
+              <X className="h-5 w-5 sm:h-6 sm:w-6" />
+            ) : (
+              <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
+            )}
           </Button>
         </div>
 
-        <Card className="bg-white border-gray-200 shadow-lg">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2" style={{ color: "#5C7F39" }}>
-              <Filter className="h-5 w-5" />
+        {/* Filters Card */}
+        <Card className="bg-white border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300">
+          <CardHeader className="pb-3 sm:pb-4">
+            <CardTitle className="flex items-center gap-2 text-green-600 text-lg sm:text-xl">
+              <Filter className="h-4 w-4 sm:h-5 sm:w-5" />
               Filters
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="text-sm font-medium text-gray-600 mb-2 block">Filter by Date</label>
+                <label className="text-xs sm:text-sm font-medium text-gray-600 mb-2 block">
+                  Filter by Date
+                </label>
                 <Input
                   type="date"
                   value={dateFilter}
                   onChange={(e) => setDateFilter(e.target.value)}
-                  className="w-full"
+                  className="w-full text-sm sm:text-base"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-600 mb-2 block">Filter by Status</label>
+                <label className="text-xs sm:text-sm font-medium text-gray-600 mb-2 block">
+                  Filter by Status
+                </label>
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger>
+                  <SelectTrigger className="text-sm sm:text-base">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -256,70 +308,80 @@ export default function AppointmentsPage() {
           </CardContent>
         </Card>
 
-        <div className="space-y-4">
+        {/* Appointments List */}
+        <div className="space-y-3 sm:space-y-4">
           {filteredAppointments.map((appointment) => (
-            <Card key={appointment.id} className="bg-white border-gray-200 shadow-lg">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2" style={{ color: "#5C7F39" }}>
-                    <Calendar className="h-5 w-5" />
+            <Card
+              key={appointment.id}
+              className="bg-white border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <CardHeader className="pb-3 sm:pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <CardTitle className="flex items-center gap-2 text-green-600 text-lg sm:text-xl">
+                    <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
                     {appointment.type}
                   </CardTitle>
                   <Badge
-                    style={{
-                      backgroundColor:
-                        appointment.status === "Completed"
-                          ? "#5C7F39"
-                          : appointment.status === "Confirmed"
-                            ? "#233E7D"
-                            : "#59595B",
-                      color: "#ffffff",
-                    }}
+                    className={`text-xs sm:text-sm self-start sm:self-auto ${
+                      appointment.status === "Completed"
+                        ? "bg-green-600 text-white"
+                        : appointment.status === "Confirmed"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-500 text-white"
+                    }`}
                   >
                     {appointment.status}
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm font-medium">{appointment.date}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm">{appointment.time}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm">{appointment.doctor}</span>
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
+                    <span className="text-xs sm:text-sm font-medium">
+                      {appointment.date}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
+                    <span className="text-xs sm:text-sm">
+                      {appointment.time}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <User className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
+                    <span className="text-xs sm:text-sm">
+                      {appointment.doctor}
+                    </span>
                   </div>
                 </div>
 
                 {appointment.notes && (
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
+                  <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2 sm:mb-3">
                       <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm font-medium text-gray-700">Doctor's Notes</span>
+                        <FileText className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
+                        <span className="text-xs sm:text-sm font-medium text-gray-700">
+                          Doctor's Notes
+                        </span>
                       </div>
-                      {(appointment.noteConfirmed || confirmedNotes.includes(appointment.id)) && (
-                        <CheckCircle className="h-4 w-4" style={{ color: "#5C7F39" }} />
+                      {(appointment.noteConfirmed ||
+                        confirmedNotes.includes(appointment.id)) && (
+                        <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-600 self-start sm:self-auto" />
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">{appointment.notes}</p>
+                    <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 leading-relaxed">
+                      {appointment.notes}
+                    </p>
                     {!appointment.noteConfirmed &&
                       !confirmedNotes.includes(appointment.id) &&
                       appointment.status === "Completed" && (
                         <Button
                           onClick={() => handleConfirmNote(appointment.id)}
                           size="sm"
-                          style={{ backgroundColor: "#5C7F39", color: "#ffffff" }}
-                          className="hover:opacity-90"
+                          className="bg-green-600 hover:bg-green-700 text-white text-xs sm:text-sm"
                         >
-                          <CheckCircle className="h-4 w-4 mr-2" />
+                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                           Confirm Receipt of Note
                         </Button>
                       )}
@@ -330,21 +392,24 @@ export default function AppointmentsPage() {
           ))}
         </div>
 
-        <Card className="bg-secondary-blue text-white shadow-lg">
-          <CardContent className="p-6">
+        {/* Health Journey Progress */}
+        <Card className="bg-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+          <CardContent className="p-4 sm:p-6">
             <div className="text-center">
-              <h3 className="text-2xl font-serif mb-2">Health Journey Progress</h3>
-              <p className="text-lg leading-relaxed">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-serif mb-2">
+                Health Journey Progress
+              </h3>
+              <p className="text-sm sm:text-base lg:text-lg leading-relaxed">
                 {completionRate >= 80
                   ? "Excellent work staying on top of your medical appointments! Your commitment to regular check-ups is keeping you healthy and strong."
                   : completionRate >= 60
-                    ? "You're doing well with your medical care! Keep up the good work attending your appointments and following your doctor's advice."
-                    : "Remember, regular medical check-ups are important for your health. Don't hesitate to schedule appointments when needed - your health is worth it!"}
+                  ? "You're doing well with your medical care! Keep up the good work attending your appointments and following your doctor's advice."
+                  : "Remember, regular medical check-ups are important for your health. Don't hesitate to schedule appointments when needed - your health is worth it!"}
               </p>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }
