@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import {
   Heart,
@@ -124,32 +125,28 @@ export default function SeniorDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-white p-2 sm:p-4 lg:p-6 font-sans">
+    <div className="min-h-screen bg-white px-4 py-2 sm:py-4 lg:py-6 font-sans">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Alert Modal */}
         {latestAlert && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-lg p-4 sm:p-6 lg:p-8 max-w-xs sm:max-w-md w-full text-center shadow-2xl">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Heart className="h-8 w-8 sm:h-10 sm:w-10 text-green-600" />
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full text-center shadow-2xl">
+              <div className="w-20 h-20 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Heart className="h-10 w-10 text-green-600" />
               </div>
-              <h2 className="text-lg sm:text-xl lg:text-2xl font-serif text-blue-800 mb-2">
+              <h2 className="text-xl font-serif text-blue-800 mb-2">
                 Hello, Margaret!
               </h2>
-              <div className="border border-gray-300 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
-                <div className="flex items-center justify-center gap-2 sm:gap-3 mb-2">
-                  <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
-                  <div className="font-medium text-green-600 text-sm sm:text-base">
-                    Latest Alert
-                  </div>
+              <div className="border border-gray-300 rounded-lg p-4 mb-6">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <AlertTriangle className="h-6 w-6 text-green-600" />
+                  <div className="font-medium text-green-600">Latest Alert</div>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base">
-                  {latestAlert}
-                </div>
+                <div className="text-gray-600">{latestAlert}</div>
               </div>
               <Button
                 onClick={dismissAlert}
-                className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-2 text-sm sm:text-base"
+                className="bg-green-600 hover:bg-green-700 text-white px-8 py-2"
               >
                 Got it!
               </Button>
@@ -157,87 +154,17 @@ export default function SeniorDashboard() {
           </div>
         )}
 
-        {/* Alert Snapshot Modal */}
-        {showAlertSnapshot && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-lg p-4 sm:p-6 max-w-xs sm:max-w-lg lg:max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg sm:text-xl lg:text-2xl font-serif text-blue-800">
-                  Recent Alerts
-                </h2>
-                <Button
-                  onClick={() => setShowAlertSnapshot(false)}
-                  variant="ghost"
-                  size="sm"
-                  className="p-2"
-                >
-                  <X className="h-4 w-4 sm:h-5 sm:w-5" />
-                </Button>
-              </div>
-              <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
-                {alertsSnapshot.map((alert) => (
-                  <div
-                    key={alert.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-100 rounded gap-2"
-                  >
-                    <div className="flex-1">
-                      <div className="text-xs sm:text-sm text-gray-700">
-                        {alert.message}
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        {alert.time}
-                      </div>
-                    </div>
-                    <Badge
-                      className={`text-xs self-start sm:self-auto ${
-                        alert.priority === "high"
-                          ? "bg-red-500 text-white"
-                          : alert.priority === "medium"
-                          ? "bg-green-600 text-white"
-                          : "bg-blue-600 text-white"
-                      }`}
-                    >
-                      {alert.priority}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base">
-                <AlertTriangle className="mr-2 h-4 w-4" />
-                View All Alerts
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Emergency Status Modal */}
-        {emergencyStatus && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-lg p-4 sm:p-6 lg:p-8 max-w-xs sm:max-w-md w-full text-center shadow-2xl">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Heart className="h-8 w-8 sm:h-10 sm:w-10 text-green-600" />
-              </div>
-              <div className="bg-red-100 border border-red-400 rounded-lg p-4 sm:p-6">
-                <Phone className="h-8 w-8 sm:h-12 sm:w-12 mx-auto mb-4 text-red-600" />
-                <div className="text-red-700 font-medium text-sm sm:text-base lg:text-lg">
-                  {emergencyStatus}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Header/Navbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-green-100 rounded-full flex items-center justify-center">
-              <Heart className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-green-600" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 lg:w-16 lg:h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <Heart className="h-7 w-7 lg:h-8 lg:w-8 text-green-600" />
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-serif text-blue-800">
+              <h1 className="text-2xl lg:text-3xl font-serif text-blue-800">
                 Betti Dashboard
               </h1>
-              <p className="text-sm sm:text-base lg:text-lg text-gray-600">
+              <p className="text-base lg:text-lg text-gray-600">
                 Welcome Back, Margaret
               </p>
             </div>
@@ -250,9 +177,9 @@ export default function SeniorDashboard() {
             className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent self-start sm:self-auto"
           >
             {isMenuOpen ? (
-              <X className="h-5 w-5 sm:h-6 sm:w-6" />
+              <X className="h-6 w-6" />
             ) : (
-              <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
+              <Menu className="h-6 w-6" />
             )}
           </Button>
         </div>
@@ -264,52 +191,50 @@ export default function SeniorDashboard() {
             onClick={toggleMenu}
           >
             <div
-              className="fixed right-0 top-0 h-full w-72 sm:w-80 bg-white shadow-lg p-4 sm:p-6 overflow-y-auto"
+              className="fixed right-0 top-0 h-full w-72 sm:w-80 bg-white shadow-lg p-6 overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <h2 className="text-lg sm:text-xl lg:text-2xl font-serif text-blue-800">
-                  Menu
-                </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-serif text-blue-800">Menu</h2>
                 <Button onClick={toggleMenu} variant="ghost" size="sm">
-                  <X className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <X className="h-5 w-5" />
                 </Button>
               </div>
 
-              <div className="space-y-3 sm:space-y-4">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left p-3 sm:p-4 h-auto bg-transparent"
-                >
-                  <User className="mr-3 h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-                  <div>
-                    <div className="font-medium text-sm sm:text-base">
-                      Profile
+              <div className="space-y-4">
+                <Link href="/profile">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left p-4 h-auto bg-transparent"
+                  >
+                    <User className="mr-3 h-5 w-5 text-blue-600" />
+                    <div>
+                      <div className="font-medium">Profile</div>
+                      <div className="text-sm text-gray-500">
+                        Personal information
+                      </div>
                     </div>
-                    <div className="text-xs sm:text-sm text-gray-500">
-                      Personal information
-                    </div>
-                  </div>
-                </Button>
+                  </Button>
+                </Link>
 
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left p-3 sm:p-4 h-auto bg-transparent"
-                >
-                  <Settings className="mr-3 h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-                  <div>
-                    <div className="font-medium text-sm sm:text-base">
-                      Settings
+                <Link href="/settings">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left p-4 h-auto bg-transparent"
+                  >
+                    <Settings className="mr-3 h-5 w-5 text-blue-600" />
+                    <div>
+                      <div className="font-medium">Settings</div>
+                      <div className="text-sm text-gray-500">
+                        App preferences
+                      </div>
                     </div>
-                    <div className="text-xs sm:text-sm text-gray-500">
-                      App preferences
-                    </div>
-                  </div>
-                </Button>
+                  </Button>
+                </Link>
 
-                <hr className="my-3 sm:my-4 border-gray-200" />
+                <hr className="my-4 border-gray-200" />
 
-                <div className="text-xs sm:text-sm font-medium text-gray-500 mb-2">
+                <div className="text-sm font-medium text-gray-500 mb-2">
                   Activity Logs
                 </div>
 
@@ -318,43 +243,45 @@ export default function SeniorDashboard() {
                     icon: MapPin,
                     title: "Restroom Activity",
                     desc: "View bathroom visits",
+                    route: "restroom",
                   },
                   {
                     icon: Calendar,
                     title: "Appointments",
                     desc: "Medical appointments log",
+                    route: "appointments",
                   },
                   {
                     icon: Utensils,
                     title: "Meals",
                     desc: "Food intake tracking",
+                    route: "meals",
                   },
                   {
                     icon: Pill,
                     title: "Medications",
                     desc: "Medication history",
+                    route: "medications",
                   },
                   {
                     icon: Droplets,
                     title: "Hydration",
                     desc: "Water intake logs",
+                    route: "hydration",
                   },
                 ].map((item, index) => (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    className="w-full justify-start text-left p-3 sm:p-4 h-auto bg-transparent"
-                  >
-                    <item.icon className="mr-3 h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-                    <div>
-                      <div className="font-medium text-sm sm:text-base">
-                        {item.title}
+                  <Link key={index} href={`/logs/${item.route}`}>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left p-4 h-auto bg-transparent"
+                    >
+                      <item.icon className="mr-3 h-5 w-5 text-blue-600" />
+                      <div>
+                        <div className="font-medium">{item.title}</div>
+                        <div className="text-sm text-gray-500">{item.desc}</div>
                       </div>
-                      <div className="text-xs sm:text-sm text-gray-500">
-                        {item.desc}
-                      </div>
-                    </div>
-                  </Button>
+                    </Button>
+                  </Link>
                 ))}
               </div>
             </div>
