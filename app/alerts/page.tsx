@@ -1,13 +1,22 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowLeft, Droplets, Pill, Clock, Flower as Shower, Bell, CheckCircle, X } from "lucide-react"
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  ArrowLeft,
+  Droplets,
+  Pill,
+  Clock,
+  Flower as Shower,
+  Bell,
+  CheckCircle,
+  X,
+} from "lucide-react";
 
 export default function AlertsPage() {
   const [alerts, setAlerts] = useState([
@@ -47,58 +56,95 @@ export default function AlertsPage() {
       priority: "low",
       dismissed: false,
     },
-  ])
+  ]);
 
   const dismissAlert = (id: number) => {
-    setAlerts(alerts.map((alert) => (alert.id === id ? { ...alert, dismissed: true } : alert)))
-  }
+    setAlerts(
+      alerts.map((alert) =>
+        alert.id === id ? { ...alert, dismissed: true } : alert
+      )
+    );
+  };
 
   const getAlertIcon = (type: string) => {
     switch (type) {
       case "medication":
-        return <Pill className="h-5 w-5" />
+        return <Pill className="h-5 w-5" />;
       case "hydration":
-        return <Droplets className="h-5 w-5" />
+        return <Droplets className="h-5 w-5" />;
       case "restroom":
-        return <Clock className="h-5 w-5" />
+        return <Clock className="h-5 w-5" />;
       case "shower":
-        return <Shower className="h-5 w-5" />
+        return <Shower className="h-5 w-5" />;
       default:
-        return <Bell className="h-5 w-5" />
+        return <Bell className="h-5 w-5" />;
     }
-  }
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "border-red-500 bg-red-50"
+        return "border-red-500 bg-red-50";
       case "medium":
-        return "border-primary-green bg-primary-green/10"
+        return "border-primary-green bg-primary-green/10";
       case "low":
-        return "border-secondary-blue bg-secondary-blue/10"
+        return "border-secondary-blue bg-secondary-blue/10";
       default:
-        return "border-alt-light-gray bg-white"
+        return "border-alt-light-gray bg-white";
     }
-  }
+  };
 
-  const activeAlerts = alerts.filter((alert) => !alert.dismissed)
+  const activeAlerts = alerts.filter((alert) => !alert.dismissed);
 
   return (
     <div className="min-h-screen bg-alt-light-gray p-4 font-sans">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Link href="/">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Dashboard
-            </Button>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Image src="/images/betti-logo.png" alt="BEetti Logo" width={60} height={60} className="rounded-full" />
-            <div>
-              <h1 className="text-3xl font-serif text-secondary-blue">Alerts & Reminders</h1>
-              <p className="text-alt-dark-gray">Manage your daily health reminders</p>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
+          {/* On small screens → Logo + Back Button side by side */}
+          <div className="flex items-center justify-between sm:hidden">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/images/betti-logo.png"
+                alt="BEetti Logo"
+                width={50}
+                height={50}
+                className="rounded-full"
+              />
+            </div>
+            <Link href="/">
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Dashboard
+              </Button>
+            </Link>
+          </div>
+
+          {/* For larger screens → keep original layout */}
+          <div className="hidden sm:flex items-center gap-4">
+            <Link href="/">
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Dashboard
+              </Button>
+            </Link>
+            <div className="flex items-center gap-4">
+              <Image
+                src="/images/betti-logo.png"
+                alt="BEetti Logo"
+                width={60}
+                height={60}
+                className="rounded-full"
+              />
+              <div>
+                <h1 className="text-3xl font-serif text-secondary-blue">
+                  Alerts & Reminders
+                </h1>
+                <p className="text-alt-dark-gray">
+                  Manage your daily health reminders
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -106,34 +152,54 @@ export default function AlertsPage() {
         {/* Alert Summary */}
         <Card className="bg-white border-alt-light-gray">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-secondary-blue font-serif">
+            <CardTitle className="flex items-center gap-2 text-secondary-blue font-serif text-lg sm:text-xl">
               <Bell className="h-6 w-6 text-primary-green" />
               Alert Summary
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-red-500">
-                  {alerts.filter((a) => a.priority === "high" && !a.dismissed).length}
+                <div className="text-xl sm:text-2xl font-bold text-red-500">
+                  {
+                    alerts.filter((a) => a.priority === "high" && !a.dismissed)
+                      .length
+                  }
                 </div>
-                <div className="text-sm text-alt-dark-gray">High Priority</div>
+                <div className="text-xs sm:text-sm text-alt-dark-gray">
+                  High Priority
+                </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary-green">
-                  {alerts.filter((a) => a.priority === "medium" && !a.dismissed).length}
+                <div className="text-xl sm:text-2xl font-bold text-primary-green">
+                  {
+                    alerts.filter(
+                      (a) => a.priority === "medium" && !a.dismissed
+                    ).length
+                  }
                 </div>
-                <div className="text-sm text-alt-dark-gray">Medium Priority</div>
+                <div className="text-xs sm:text-sm text-alt-dark-gray">
+                  Medium Priority
+                </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-secondary-blue">
-                  {alerts.filter((a) => a.priority === "low" && !a.dismissed).length}
+                <div className="text-xl sm:text-2xl font-bold text-secondary-blue">
+                  {
+                    alerts.filter((a) => a.priority === "low" && !a.dismissed)
+                      .length
+                  }
                 </div>
-                <div className="text-sm text-alt-dark-gray">Low Priority</div>
+                <div className="text-xs sm:text-sm text-alt-dark-gray">
+                  Low Priority
+                </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary-green">{alerts.filter((a) => a.dismissed).length}</div>
-                <div className="text-sm text-alt-dark-gray">Completed</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary-green">
+                  {alerts.filter((a) => a.dismissed).length}
+                </div>
+                <div className="text-xs sm:text-sm text-alt-dark-gray">
+                  Completed
+                </div>
               </div>
             </div>
           </CardContent>
@@ -142,46 +208,63 @@ export default function AlertsPage() {
         {/* Active Alerts */}
         <Card className="bg-white border-alt-light-gray">
           <CardHeader>
-            <CardTitle className="text-secondary-blue font-serif">Active Alerts</CardTitle>
+            <CardTitle className="text-secondary-blue font-serif text-lg sm:text-xl">
+              Active Alerts
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {activeAlerts.length === 0 ? (
                 <div className="text-center py-8">
                   <CheckCircle className="h-12 w-12 text-primary-green mx-auto mb-4" />
-                  <p className="text-lg text-primary-green font-medium">All caught up!</p>
-                  <p className="text-alt-dark-gray">No active alerts at this time.</p>
+                  <p className="text-lg text-primary-green font-medium">
+                    All caught up!
+                  </p>
+                  <p className="text-alt-dark-gray">
+                    No active alerts at this time.
+                  </p>
                 </div>
               ) : (
                 activeAlerts.map((alert) => (
-                  <Alert key={alert.id} className={`${getPriorityColor(alert.priority)} border-2`}>
-                    <div className="flex items-start justify-between">
+                  <Alert
+                    key={alert.id}
+                    className={`${getPriorityColor(alert.priority)} border-2`}
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                       <div className="flex items-start gap-3">
-                        <div className="text-secondary-blue mt-1">{getAlertIcon(alert.type)}</div>
+                        <div className="text-secondary-blue mt-1">
+                          {getAlertIcon(alert.type)}
+                        </div>
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-medium text-secondary-blue">{alert.title}</h4>
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            <h4 className="font-medium text-secondary-blue">
+                              {alert.title}
+                            </h4>
                             <Badge
                               className={`text-xs ${
                                 alert.priority === "high"
                                   ? "bg-red-500 text-white"
                                   : alert.priority === "medium"
-                                    ? "bg-primary-green text-white"
-                                    : "bg-secondary-blue text-white"
+                                  ? "bg-primary-green text-white"
+                                  : "bg-secondary-blue text-white"
                               }`}
                             >
                               {alert.priority}
                             </Badge>
                           </div>
-                          <AlertDescription className="text-alt-dark-gray">{alert.message}</AlertDescription>
-                          <div className="text-xs text-alt-dark-gray mt-2">Scheduled for: {alert.time}</div>
+                          <AlertDescription className="text-alt-dark-gray text-sm">
+                            {alert.message}
+                          </AlertDescription>
+                          <div className="text-xs text-alt-dark-gray mt-2">
+                            Scheduled for: {alert.time}
+                          </div>
                         </div>
                       </div>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => dismissAlert(alert.id)}
-                        className="text-alt-dark-gray hover:text-primary-green"
+                        className="text-alt-dark-gray hover:text-primary-green self-end sm:self-start"
                       >
                         <X className="h-4 w-4" />
                       </Button>
@@ -197,20 +280,31 @@ export default function AlertsPage() {
         {alerts.filter((a) => a.dismissed).length > 0 && (
           <Card className="bg-white border-alt-light-gray">
             <CardHeader>
-              <CardTitle className="text-secondary-blue font-serif">Completed Today</CardTitle>
+              <CardTitle className="text-secondary-blue font-serif text-lg sm:text-xl">
+                Completed Today
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 {alerts
                   .filter((a) => a.dismissed)
                   .map((alert) => (
-                    <div key={alert.id} className="flex items-center gap-3 p-3 bg-primary-green/10 rounded-lg">
+                    <div
+                      key={alert.id}
+                      className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-primary-green/10 rounded-lg"
+                    >
                       <CheckCircle className="h-5 w-5 text-primary-green" />
-                      <div className="flex-1">
-                        <div className="font-medium text-secondary-blue">{alert.title}</div>
-                        <div className="text-sm text-alt-dark-gray">{alert.message}</div>
+                      <div className="flex-1 text-center sm:text-left">
+                        <div className="font-medium text-secondary-blue">
+                          {alert.title}
+                        </div>
+                        <div className="text-sm text-alt-dark-gray">
+                          {alert.message}
+                        </div>
                       </div>
-                      <div className="text-xs text-alt-dark-gray">{alert.time}</div>
+                      <div className="text-xs text-alt-dark-gray">
+                        {alert.time}
+                      </div>
                     </div>
                   ))}
               </div>
@@ -219,5 +313,5 @@ export default function AlertsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
