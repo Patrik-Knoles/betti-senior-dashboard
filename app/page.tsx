@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import Link from "next/link"
-import Image from "next/image"
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import Link from "next/link";
+import Image from "next/image";
 import {
   Heart,
   Droplets,
@@ -28,19 +28,19 @@ import {
   X,
   User,
   Settings,
-} from "lucide-react"
+} from "lucide-react";
 
 export default function SeniorDashboard() {
-  const [wellBeingScore] = useState(85)
-  const [lastOkTime, setLastOkTime] = useState("2 hours ago")
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [latestAlert, setLatestAlert] = useState<string | null>(null)
-  const [okButtonText, setOkButtonText] = useState("I'm OK")
-  const [showAlertSnapshot, setShowAlertSnapshot] = useState(false)
-  const [emergencyStatus, setEmergencyStatus] = useState("")
+  const [wellBeingScore] = useState(85);
+  const [lastOkTime, setLastOkTime] = useState("2 hours ago");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [latestAlert, setLatestAlert] = useState<string | null>(null);
+  const [okButtonText, setOkButtonText] = useState("I'm OK");
+  const [showAlertSnapshot, setShowAlertSnapshot] = useState(false);
+  const [emergencyStatus, setEmergencyStatus] = useState("");
 
   useEffect(() => {
-    const hasShownAlert = sessionStorage.getItem("alertShown")
+    const hasShownAlert = sessionStorage.getItem("alertShown");
 
     if (!hasShownAlert) {
       const alerts = [
@@ -48,62 +48,82 @@ export default function SeniorDashboard() {
         "Hydration reminder: You haven't had water in 3 hours",
         "Restroom reminder: It's been 4 hours since your last visit",
         "Shower reminder: Daily shower scheduled for 2 PM",
-      ]
+      ];
 
-      const randomAlert = alerts[Math.floor(Math.random() * alerts.length)]
-      setLatestAlert(randomAlert)
-      sessionStorage.setItem("alertShown", "true")
+      const randomAlert = alerts[Math.floor(Math.random() * alerts.length)];
+      setLatestAlert(randomAlert);
+      sessionStorage.setItem("alertShown", "true");
 
       const timer = setTimeout(() => {
-        setLatestAlert(null)
-      }, 10000)
+        setLatestAlert(null);
+      }, 10000);
 
-      return () => clearTimeout(timer)
+      return () => clearTimeout(timer);
     }
-  }, [])
+  }, []);
 
   const handleOkButton = () => {
-    setOkButtonText("Thank you! Status recorded.")
-    setLastOkTime("Just now")
+    setOkButtonText("Thank you! Status recorded.");
+    setLastOkTime("Just now");
     setTimeout(() => {
-      setOkButtonText("I'm OK")
-    }, 3000)
-  }
+      setOkButtonText("I'm OK");
+    }, 3000);
+  };
 
   const handlePanicButton = () => {
-    setEmergencyStatus("Calling 911...")
+    setEmergencyStatus("Calling 911...");
     setTimeout(() => {
-      setEmergencyStatus("Emergency services contacted. Help is on the way.")
-    }, 2000)
+      setEmergencyStatus("Emergency services contacted. Help is on the way.");
+    }, 2000);
     setTimeout(() => {
-      setEmergencyStatus("")
-    }, 8000)
-  }
+      setEmergencyStatus("");
+    }, 8000);
+  };
 
   const handleViewAlerts = () => {
-    setShowAlertSnapshot(true)
-  }
+    setShowAlertSnapshot(true);
+  };
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   const dismissAlert = () => {
-    setLatestAlert(null)
-  }
+    setLatestAlert(null);
+  };
 
   const alertsSnapshot = [
-    { id: 1, message: "Medication reminder: Take your afternoon pills", time: "2:00 PM", priority: "high" },
-    { id: 2, message: "Hydration reminder: You haven't had water in 3 hours", time: "1:30 PM", priority: "medium" },
+    {
+      id: 1,
+      message: "Medication reminder: Take your afternoon pills",
+      time: "2:00 PM",
+      priority: "high",
+    },
+    {
+      id: 2,
+      message: "Hydration reminder: You haven't had water in 3 hours",
+      time: "1:30 PM",
+      priority: "medium",
+    },
     {
       id: 3,
       message: "Restroom reminder: It's been 4 hours since your last visit",
       time: "12:45 PM",
       priority: "medium",
     },
-    { id: 4, message: "Shower reminder: Daily shower scheduled for 2 PM", time: "11:00 AM", priority: "low" },
-    { id: 5, message: "Appointment reminder: Dr. Smith tomorrow at 2:00 PM", time: "10:30 AM", priority: "high" },
-  ]
+    {
+      id: 4,
+      message: "Shower reminder: Daily shower scheduled for 2 PM",
+      time: "11:00 AM",
+      priority: "low",
+    },
+    {
+      id: 5,
+      message: "Appointment reminder: Dr. Smith tomorrow at 2:00 PM",
+      time: "10:30 AM",
+      priority: "high",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-white p-4 font-sans">
@@ -159,7 +179,7 @@ export default function SeniorDashboard() {
                 {alertsSnapshot.map((alert) => (
                   <div
                     key={alert.id}
-                    className="flex items-center justify-between p-3 bg-alt-light-gray rounded"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-alt-light-gray rounded"
                   >
                     <div className="flex-1">
                       <div className="text-sm text-alt-dark-gray">
@@ -170,13 +190,13 @@ export default function SeniorDashboard() {
                       </div>
                     </div>
                     <Badge
-                      className={
+                      className={`mt-2 sm:mt-0 ${
                         alert.priority === "high"
                           ? "bg-red-500 text-white"
                           : alert.priority === "medium"
                           ? "bg-primary-green text-white"
                           : "bg-secondary-blue text-white"
-                      }
+                      }`}
                     >
                       {alert.priority}
                     </Badge>
@@ -212,7 +232,7 @@ export default function SeniorDashboard() {
           </div>
         )}
 
-{/* Navbar Starts */}
+        {/* Navbar Starts */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Image
@@ -223,10 +243,10 @@ export default function SeniorDashboard() {
               className="rounded-full"
             />
             <div>
-              <h1 className="text-3xl font-serif text-secondary-blue">
+              <h1 className="text-2xl sm:text-3xl font-serif text-secondary-blue">
                 Betti Dashboard
               </h1>
-              <p className="text-lg text-alt-dark-gray">
+              <p className="text-sm sm:text-lg text-alt-dark-gray">
                 Welcome Back, Margaret
               </p>
             </div>
@@ -245,7 +265,7 @@ export default function SeniorDashboard() {
             )}
           </Button>
         </div>
-{/* Navbar Ends */}
+        {/* Navbar Ends */}
 
         {/* Side Menu Starts */}
         {isMenuOpen && (
@@ -254,7 +274,7 @@ export default function SeniorDashboard() {
             onClick={toggleMenu}
           >
             <div
-              className="fixed right-0 top-0 h-full w-80 bg-white shadow-lg p-6 overflow-y-auto"
+              className="fixed right-0 top-0 h-full w-64 sm:w-80 bg-white shadow-lg p-6 overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-6">
@@ -381,7 +401,7 @@ export default function SeniorDashboard() {
             </div>
           </div>
         )}
-      {/* Side Menu Ends */}
+        {/* Side Menu Ends */}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="lg:col-span-2 bg-white border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
@@ -392,11 +412,11 @@ export default function SeniorDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                 <div className="text-6xl font-bold text-primary-green">
                   {wellBeingScore}
                 </div>
-                <div className="text-right">
+                <div className="text-left sm:text-right mt-2 sm:mt-0">
                   <div className="text-sm text-alt-dark-gray">Out of 100</div>
                   <span
                     className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium"
