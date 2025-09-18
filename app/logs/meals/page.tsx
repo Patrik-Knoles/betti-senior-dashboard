@@ -118,22 +118,23 @@ export default function MealsPage() {
   return (
     <div className="min-h-screen bg-white p-4 font-sans">
       <div className="max-w-6xl mx-auto space-y-6">
+        {/* Header */}
         <div className="flex items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link href="/">
-              <Button variant="outline" size="sm">
+              <Button className="mr-4" variant="outline" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
+                Back
               </Button>
             </Link>
-            <h1 className="text-3xl font-serif text-secondary-blue">
+            <h1 className="text-[clamp(16px,3vw,24px)] font-serif text-secondary-blue shrink whitespace-nowrap text-center w-full">
               Meal Tracking Logs
             </h1>
           </div>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsMenuOpen(true)}
+            onClick={toggleMenu}
             className="flex items-center gap-2"
           >
             <Menu className="h-4 w-4" />

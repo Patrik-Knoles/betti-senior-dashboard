@@ -136,22 +136,23 @@ export default function HydrationPage() {
   return (
     <div className="min-h-screen bg-white p-4 font-sans">
       <div className="max-w-6xl mx-auto space-y-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
+        {/* Header */}
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link href="/">
-              <Button variant="outline" size="sm">
+              <Button className="mr-4" variant="outline" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
+                Back
               </Button>
             </Link>
-            <h1 className="text-3xl font-serif text-secondary-blue">
+            <h1 className="text-[clamp(16px,3vw,24px)] font-serif text-secondary-blue shrink whitespace-nowrap text-center w-full">
               Hydration Logs
             </h1>
           </div>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsMenuOpen(true)}
+            onClick={toggleMenu}
             className="flex items-center gap-2"
           >
             <Menu className="h-4 w-4" />
@@ -405,7 +406,7 @@ export default function HydrationPage() {
                   key={log.id}
                   className="flex items-center justify-between p-4 bg-gray-100 rounded-lg"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-2 sm:gap-4">
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-gray-500" />
                       <span className="text-sm font-medium">{log.date}</span>

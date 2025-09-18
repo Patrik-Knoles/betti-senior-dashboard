@@ -52,7 +52,7 @@ export default function ProfilePage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           {/* Left */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex flex-row sm:flex-row sm:items-center gap-4">
             <Link href="/" className="w-fit">
               <Button variant="outline" size="sm" className="w-full sm:w-auto">
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -61,13 +61,6 @@ export default function ProfilePage() {
             </Link>
 
             <div className="flex items-center gap-3">
-              <Image
-                src="/images/betti-logo.png"
-                alt="Betti Logo"
-                width={45}
-                height={45}
-                className="rounded-full"
-              />
               <div>
                 <h1 className="text-2xl md:text-3xl font-serif text-secondary-blue">
                   Profile Information
@@ -76,6 +69,13 @@ export default function ProfilePage() {
                   Manage your personal details
                 </p>
               </div>
+              {/* <Image
+                src="/images/betti-logo.png"
+                alt="Betti Logo"
+                width={45}
+                height={45}
+                className="rounded-full"
+              /> */}
             </div>
           </div>
 
