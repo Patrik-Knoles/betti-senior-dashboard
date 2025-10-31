@@ -19,7 +19,7 @@ const georgia = Georgia({
 })
 
 export const metadata: Metadata = {
-  title: "Betti - Senior Care Dashboard",
+  title: "Betti - User Dashboard",
   description: "Be Empowered Through Technology and Innovation - Health and wellness monitoring for seniors",
   generator: "v0.app",
 }
