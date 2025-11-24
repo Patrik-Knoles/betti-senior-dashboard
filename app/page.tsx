@@ -27,6 +27,7 @@ import {
   X,
   User,
   Settings,
+  Smartphone
 } from "lucide-react";
 
 export default function SeniorDashboard() {
@@ -227,6 +228,21 @@ export default function SeniorDashboard() {
                       <div className="font-medium">Settings</div>
                       <div className="text-sm text-gray-500">
                         App preferences
+                      </div>
+                    </div>
+                  </Button>
+                </Link>
+
+                <Link href="/device-status">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left p-4 h-auto bg-transparent"
+                  >
+                    <Smartphone className="mr-3 h-5 w-5 text-blue-600" />
+                    <div>
+                      <div className="font-medium">Device Status</div>
+                      <div className="text-sm text-gray-500">
+                        Smart Home Devices
                       </div>
                     </div>
                   </Button>

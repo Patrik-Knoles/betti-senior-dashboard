@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -142,20 +143,22 @@ export default function AppointmentsPage() {
               </div>
 
               <div className="space-y-3 sm:space-y-4">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left p-3 sm:p-4 h-auto bg-transparent"
-                >
-                  <User className="mr-3 h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-                  <div>
-                    <div className="font-medium text-sm sm:text-base">
-                      Profile
+                <Link href="/dashboard" className="space-y-3 sm:space-y-4">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left p-3 sm:p-4 h-auto bg-transparent"
+                  >
+                    <User className="mr-3 h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                    <div>
+                      <div className="font-medium text-sm sm:text-base">
+                        Profile
+                      </div>
+                      <div className="text-xs sm:text-sm text-gray-500">
+                        Personal information
+                      </div>
                     </div>
-                    <div className="text-xs sm:text-sm text-gray-500">
-                      Personal information
-                    </div>
-                  </div>
-                </Button>
+                  </Button>
+                </Link>
 
                 <Button
                   variant="outline"
