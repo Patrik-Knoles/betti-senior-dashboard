@@ -32,6 +32,6 @@ steps:
             }
           ]
         }
-      channel: ${{ #betti-dev }}
-      slack-webhook-url: ${{ https://hooks.slack.com/services/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 }}
+      channel: ${{ SLACK_CHANNEL }}
+      slack-webhook-url: ${{ SLACK_WEBHOOK_URL }}
 ```
