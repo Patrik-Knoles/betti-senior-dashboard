@@ -1,0 +1,37 @@
+name: Notify on Repo Changes
+
+on:
+push:
+branches:
+- "**"
+
+jobs:
+slack_notify:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - name: Send Slack Notification
+    uses: slackapi/slack-github-action@v1.25.0
+    with:
+      payload: |
+        {
+          "text": "Repository Update Notification",
+          "blocks": [
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Repository Updated!* :
+                tada:\n*Repository:
+                * `${{ github.repository }}`\n*Branch:
+                * `${{ github.ref_name }}`\n*Commit by:
+                * `${{ github.actor }}`\n*Message:
+                * `${{ github.event.head_commit.message }}`"
+              }
+            }
+          ]
+        }
+      channel: ${{ #betti-dev }}
+      slack-webhook-url: ${{ https://hooks.slack.com/services/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 }}
+```
