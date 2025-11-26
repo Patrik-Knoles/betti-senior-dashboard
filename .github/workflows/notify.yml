@@ -1,37 +1,161 @@
-name: Notify on Repo Changes
+name: Cloudhub - Build and Deploy
 
 on:
-push:
-branches:
-- "**"
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
-slack_notify:
-runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+      NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+      PLATFORM_USERNAME: ${{ secrets.PLATFORM_USERNAME }}
+      PLATFORM_PASSWORD: ${{ secrets.PLATFORM_PASSWORD }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-```
-steps:
-  - name: Send Slack Notification
-    uses: slackapi/slack-github-action@v1.25.0
-    with:
-      payload: |
-        {
-          "text": "Repository Update Notification",
-          "blocks": [
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "*Repository Updated!* :
-                tada:\n*Repository:
-                * `${{ github.repository }}`\n*Branch:
-                * `${{ github.ref_name }}`\n*Commit by:
-                * `${{ github.actor }}`\n*Message:
-                * `${{ github.event.head_commit.message }}`"
+    steps:
+    - name: Slack Notification - Build Started
+      uses: slackapi/slack-github-action@v1
+      with:
+        slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        channel: '#betti-dev'
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": ":hourglass_flowing_sand: *Build Started*\nBranch: `${{ github.ref_name }}`\nRepository: `${{ github.repository }}`"
+                }
               }
-            }
-          ]
-        }
-      channel: ${{ SLACK_CHANNEL }}
-      slack-webhook-url: ${{ SLACK_WEBHOOK_URL }}
-```
+            ]
+          }
+      if: always()
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Restore Maven Cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Build with Maven
+      run: mvn clean -B package -s .maven/settings.xml
+
+    - name: Stamp artifact file name with commit hash
+      run: |
+        artifactName=$(ls target/*.jar | head -1)
+        commitHash=$(git rev-parse --short "$GITHUB_SHA")
+        baseName=$(basename "$artifactName" .jar)
+        newName="target/${baseName}-$commitHash.jar"
+        mv "$artifactName" "$newName"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: target/*.jar
+
+    - name: Slack Notification - Build Completed
+      uses: slackapi/slack-github-action@v1
+      with:
+        slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        channel: '#betti-dev'
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "${{ job.status == 'success' && ':white_check_mark: *Build Succeeded*' || ':x: *Build Failed*' }}\nBranch: `${{ github.ref_name }}`\nRepository: `${{ github.repository }}`"
+                }
+              }
+            ]
+          }
+      if: always()
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+      NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+      PLATFORM_USERNAME: ${{ secrets.PLATFORM_USERNAME }}
+      PLATFORM_PASSWORD: ${{ secrets.PLATFORM_PASSWORD }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    steps:
+    - name: Slack Notification - Deploy Started
+      uses: slackapi/slack-github-action@v1
+      with:
+        slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        channel: '#betti-dev'
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": ":rocket: *Deployment Started*\nBranch: `${{ github.ref_name }}`\nRepository: `${{ github.repository }}`"
+                }
+              }
+            ]
+          }
+      if: always()
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Restore Maven Cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Download Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: artifacts
+
+    - name: Deploy to Sandbox
+      run: |
+        artifactName=$(ls *.jar | head -1)
+        mvn deploy -DmuleDeploy \
+          -Dmule.artifact="$artifactName" \
+          -s .maven/settings.xml \
+          -DskipTests
+
+    - name: Slack Notification - Deploy Completed
+      uses: slackapi/slack-github-action@v1
+      with:
+        slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        channel: '#betti-dev'
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "${{ job.status == 'success' && ':white_check_mark: *Deployment Succeeded*' || ':x: *Deployment Failed*' }}\nBranch: `${{ github.ref_name }}`\nRepository: `${{ github.repository }}`"
+                }
+              }
+            ]
+          }
+      if: always()
+
