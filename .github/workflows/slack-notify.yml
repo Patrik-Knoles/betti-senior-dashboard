@@ -3,7 +3,8 @@ name: Notify via Slack
 on:
   push:
     branches:
-      - "**"
+      - master
+      - main
 
 jobs:
   slack_notify:
