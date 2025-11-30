@@ -101,7 +101,7 @@ export default function SeniorDashboard() {
     },
     {
       id: 2,
-      message: "Hydration reminder: You haven't had water in 3 hours",
+      message: "Hydration reminder: You have not had water in 3 hours",
       time: "1:30 PM",
       priority: "medium",
     },
