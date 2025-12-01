@@ -14,13 +14,17 @@ jobs:
       - name: Send Slack Notification
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          # Escape the commit message for JSON
-          ESCAPED_MESSAGE=$(echo "$COMMIT_MESSAGE" | jq -Rs '.')
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
 
-          curl -X POST -H 'Content-type: application/json' \
-            --fail \
-            --show-error \
-            --data "{\"text\": \"🔔 *Repository Updated*\n\n*Repo:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Actor:* ${{ github.actor }}\n*Message:* ${ESCAPED_MESSAGE}\"}" \
+          PAYLOAD=$(cat <<EOF
+          {
+            "text": "🔔 *Repository Updated*\n\n*Repo:* ${GITHUB_REPOSITORY}\n*Branch:* ${GITHUB_REF_NAME}\n*Actor:* ${GITHUB_ACTOR}\n*Message:* ${COMMIT_MESSAGE}"
+          }
+          EOF
+          )
+
+          echo "Sending Slack notification..."
+          curl -X POST -H "Content-type: application/json" \
+            --data "$PAYLOAD" \
             "$SLACK_WEBHOOK_URL"
